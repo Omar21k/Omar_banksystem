@@ -5,13 +5,13 @@ def connect_to_db():
         host='localhost',
         user='root',
         password='I\'llmakeit',
-        database='bank system'
+        database='Omar_bank'
 
     )
 if __name__=='__main__':
     conection=connect_to_db()
     print(conection)
     cursor=conection.cursor()
-    cursor.execute("Select * FROM Clients")
+    cursor.execute("Select * FROM People")
     for x in cursor.fetchall():
         print(x)

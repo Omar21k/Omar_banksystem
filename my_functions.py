@@ -9,59 +9,72 @@ def create_acc():
     acc_num=input('Enter Account Number: ')
     pin=input('Enter your PIN: ')
     n=input('Enter Name: ')
-    balance=input('Enter the opening balance: ')
-    sql1=("""INSERT INTO `Omar_bank`.`People` (`Acc_ID`,`PIN`,`Name`,`Balance`) VALUES ('{acc_num}','{pin}','{n}',{balance})""")
+    balance=int(input('Enter the opening balance: '))
+    sql=(f"""INSERT INTO `Omar_bank`.`People` (`Acc_ID`,`PIN`,`Name`,`Balance`) VALUES ('{acc_num}','{pin}','{n}',{balance});""")
     x=mydb.cursor()
-    x.execute(sql1)
+    x.execute(sql)
     mydb.commit()
-    print('Data succesfully added')
+    print('\nAccount succesfully created\n')
     menu()
+
 def deposit():
-    acc=('Enter account number: ')
-    amount=('Enter the amount you want to deposit: ')
+    acc=input('Enter Account ID: ')
+    amount=int(input('Enter the amount you want to deposit: '))
+    a=(f"""UPDATE People SET Balance= Balance+{amount} WHERE Acc_ID={acc} ;""")
+    x=mydb.cursor()
+    x.execute(a)
+    mydb.commit()
+    print(f'\n{amount}$ succsesfully deposited\n')
     menu()
 
-#def withdraw():
-    amount=('Enter the amount you want to withdraw: ')
-    acc=('Enter account number: ')
-    a='select Balance from Clients1 where Acc_ID=%s'
-    data=(acc,)
+def withdraw():
+    acc=input('Enter Account ID: ')
+    amount=int(input('Enter the amount you want to withdraw: '))
+    a=(f"""UPDATE People SET Balance= Balance-{amount} WHERE Acc_ID={acc} ;""")
     x=mydb.cursor()
-    x.execute(a,data)
-    result=x.fetchone()
-    t=result[0]-amount
-    sql='update Clients1 set Balance where Acc_ID=%s'
-    d=(t,acc)
-    x.execute(sql,d)
+    x.execute(a)
     mydb.commit()
+    print(f'\n{amount}$ succesfully withdrew\n ')
+
     menu()
-#def check():
+def check():
     acc=int(input('Enter acc #: '))
-    a='select from * Clients1 where Acc_ID=%s'
+    a=f"""SELECT Balance FROM People WHERE Acc_ID={acc};"""
     data=(acc,)
     x=mydb.cursor()
-    x.execute(a,data)
+    x.execute(a)
     result=x.fetchone()
-    print('Balance for account:',acc,'is',result[-1])
+    if result is None:
+        print("No balance found for this acount")
+    else:
+        balance=result[0]
+        print("Balance for account ID:",acc, "is",balance)
+    mydb.close()
     menu()
 
-#def details():
-    acc=int(input('Enter acc #: '))
-    a='select from * Clients1 where Acc_ID=%s'
-    data=(acc,)
+def details():
+    acc=input('Enter Account ID: ')
+    a=(f"""SELECT * FROM People WHERE Acc_ID={acc};""")
     x=mydb.cursor()
-    x.execute(a,data)
+    x.execute(a)
     result=x.fetchone()
-    for i in result:
-        print(i)
+    #for i in result:
+       # print(i)
+    if result is not None:
+        print(f"{'Acc_ID'}    {'PIN'}    {'Name'}   {'Balance'}")
+        print(f"{result[0]} {result[1]} {result[2]} {result[3]}")
+    else:
+        print('Account not found')
+    x.close()
+    mydb.close()
     menu()
-#def close_acc():
-    acc=int(input('Enter Acc_ID: '))
-    sql1='delete from Clients1 where Acc_ID=%s'
-    data=(acc,)
+def close_acc():
+    acc=input('Enter Account ID: ')
+    sql=f"""DELETE FROM People WHERE Acc_ID={acc};"""
     x=mydb.cursor()
-    x.execute(sql1)
+    x.execute(sql)
     mydb.commit()
+    print('\n','Account closed succesfully\n')
     menu()
 
 
@@ -86,7 +99,11 @@ def menu():
         details()
     elif selection==6:
         close_acc()
+    elif selection==7:
+        print('Have a Nice day!')
     else:
         print('Error')
         menu()
+        
+
 menu()
