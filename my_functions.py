@@ -86,7 +86,7 @@ def close_acc():
 
 def menu():
     print('-----Hello user-----')
-    selection=int(input('Choose from the following options:\n1.Create an account\n2.Deposit\n3.Check Balance\n4.Withdraw\n5.Account details\n6.close account '))
+    selection=int(input('Choose from the following options:\n1.Create an account\n2.Deposit\n3.Check Balance\n4.Withdraw\n5.Account details\n6.close account\n7.Exit '))
     if selection==1:
         create_acc()
     elif selection==2:
@@ -104,6 +104,6 @@ def menu():
     else:
         print('Error')
         menu()
-        
+
 
 menu()
